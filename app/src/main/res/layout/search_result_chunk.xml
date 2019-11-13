@@ -4,18 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/previewLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <ImageView
-        android:id="@+id/catPic"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+    android:layout_height="80dp">
 
     <TextView
         android:id="@+id/catName"
@@ -25,7 +14,8 @@
         android:layout_marginLeft="16dp"
         android:text="Name of Cat"
         android:textSize="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/catPic"
-        app:layout_constraintStart_toEndOf="@+id/catPic"
-        app:layout_constraintTop_toTopOf="@+id/catPic" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.39" />
 </androidx.constraintlayout.widget.ConstraintLayout>

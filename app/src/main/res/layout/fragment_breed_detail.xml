@@ -15,7 +15,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="64dp"
-            android:background="#FFA726"
+            android:background="@android:color/holo_blue_light"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -24,7 +24,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="catName"
+                android:textColor="@android:color/white"
                 android:textSize="30dp"
+                android:textStyle="bold"
+                app:fontFamily="casual"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +42,7 @@
                 android:layout_marginRight="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/like"
                 tools:src="@drawable/like" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -66,6 +70,8 @@
                         android:id="@+id/description"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:text="Bengals are a lot of fun to live with, but they're definitely not the cat for everyone, or for first-time cat owners. Extremely intelligent, curious and active, they demand a lot of interaction and woe betide the owner who doesn't provide it."
                         app:layout_constraintEnd_toStartOf="@+id/catPic"
                         app:layout_constraintHorizontal_bias="1.0"
@@ -81,6 +87,148 @@
                         app:srcCompat="@mipmap/ic_launcher" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/descPic">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/rowTemp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/labelTemp"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="Temperament"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/temperament"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="temperament"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/labelTemp"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/rowOrigin"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rowTemp">
+
+                        <TextView
+                            android:id="@+id/labelOrigin"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="Origin"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/origin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            app:layout_constraintStart_toEndOf="@id/labelOrigin"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/rowWeight"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rowOrigin">>
+
+                        <TextView
+                            android:id="@+id/labelWeight"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="Weight"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/weight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            app:layout_constraintStart_toEndOf="@+id/labelWeight"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/rowLife"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rowWeight">
+
+                        <TextView
+                            android:id="@+id/labelLife"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="Lifespan"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/lifespan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            app:layout_constraintStart_toEndOf="@id/labelLife"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/rowWiki"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rowLife">
+
+                        <TextView
+                            android:id="@+id/labelWiki"
+                            android:layout_width="150dp"
+                            android:layout_height="wrap_content"
+                            android:text="Wikipedia Link"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/wiki"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/labelWiki"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!--
                 <TableLayout
                     android:id="@+id/tableLayout"
                     android:layout_width="0dp"
@@ -92,7 +240,7 @@
                     <TableRow
                         android:id="@+id/rowTemp"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent">
+                        android:layout_height="79dp">
 
                         <TextView
                             android:layout_width="100dp"
@@ -108,8 +256,6 @@
                             android:layout_margin="10dp"
                             android:layout_marginRight="0dp"
                             android:inputType="text"
-                            android:scrollHorizontally="false"
-                            android:singleLine="false"
                             android:text="TextView" />
                     </TableRow>
 
@@ -191,11 +337,12 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:layout_marginRight="0dp"
+                            android:inputType="textUri"
                             android:singleLine="false"
                             android:text="TextView" />
                     </TableRow>
 
-                </TableLayout>
+                </TableLayout>-->
 
                 <com.github.mikephil.charting.charts.RadarChart
                     android:id="@+id/RadarChart"
@@ -203,7 +350,7 @@
                     android:layout_height="400dp"
                     android:layout_marginTop="8dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tableLayout">
+                    app:layout_constraintTop_toBottomOf="@id/info">
 
                 </com.github.mikephil.charting.charts.RadarChart>
 

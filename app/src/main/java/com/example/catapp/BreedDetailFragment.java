@@ -9,10 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
@@ -115,11 +116,12 @@ public class BreedDetailFragment extends Fragment {
         String url = "https://api.thecatapi.com/v1/images/search?breed_id="+catID;
         StringRequest stringRequest = new StringRequest(Request.Method.GET,url,responseListener,errorListener);
         requestQueue.add(stringRequest);
+
+
     }
 
     private void setFragment(ArrayList<CatImport> catsImports) {
-        Breeds selectedCat = catsImports.get(0).getBreeds().get(0);
-
+        final Breeds selectedCat = catsImports.get(0).getBreeds().get(0);
         TextView catName = getView().findViewById(R.id.catName);
         catName.setText(catImports.get(0).getBreeds().get(0).getName());
         TextView description = getView().findViewById(R.id.description);
@@ -127,29 +129,51 @@ public class BreedDetailFragment extends Fragment {
         ImageView catPic = getView().findViewById(R.id.catPic);
         Glide.with(getContext()).load(catImports.get(0).getUrl()).into(catPic);
 
+
+
+        final ImageView likeButton = getView().findViewById(R.id.likeButton);
+        if(Favourite.getFavourited().size()>0){
+            for(int i=0;i<Favourite.getFavourited().size();i++) {
+                System.out.println("selected cat: "+selectedCat.getName()+" | checking favCat: "+Favourite.getFavourited().get(i).getName());
+                if (selectedCat.getName().equals(Favourite.getFavourited().get(i).getName())) {
+                    System.out.println("match found");
+                    likeButton.setImageResource(R.drawable.liked);
+                }
+            }
+        }
+
+        likeButton.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("clicked");
+                AppCompatActivity activity = (AppCompatActivity)getView().getContext();
+                if(likeButton.getDrawable().getConstantState()==getResources().getDrawable(R.drawable.like).getConstantState()){
+                    likeButton.setImageResource(R.drawable.liked);
+                    Favourite.addToFavourites(selectedCat);
+                }
+                else{
+                    likeButton.setImageResource(R.drawable.like);
+                    for(int i=0;i<Favourite.getFavourited().size();i++){
+                        if(selectedCat.getName().equals(Favourite.getFavourited().get(i).getName())){
+                            Favourite.removeFromFav(Favourite.getFavourited().get(i));
+                            System.out.println("removed from favourites list");
+                        }
+                    }
+
+                }
+            }
+        }));
         setChart(selectedCat);
 
         TextView temperament = getView().findViewById(R.id.temperament);
         TextView origin = getView().findViewById(R.id.origin);
         TextView weight = getView().findViewById(R.id.weight);
         TextView lifespan = getView().findViewById(R.id.lifespan);
-        TextView wiki = getView().findViewById(R.id.wiki);
+        TextView wiki = getView().findViewById(R.id.labelWiki);
 
-        /*try {
-            if(checkNullGetters(selectedCat,Breeds.class.getDeclaredMethod("getTemperament", null))){
-                temperament.setText(selectedCat.getTemperament());
-            }
-            else{
-
-            }
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }*/
-
-        //for each method in following, if null set tablerow off.
 
         ArrayList<Method> attributeMethods = new ArrayList<>();
-        HashMap<Method,TableRow> methodRowMap = new HashMap<>();
+        HashMap<Method, ConstraintLayout> methodRowMap = new HashMap<>();
         HashMap<Method,TextView> methodTextMap = new HashMap<>();
 
         try {
@@ -162,11 +186,11 @@ public class BreedDetailFragment extends Fragment {
             e.printStackTrace();
         }
         try {
-            methodRowMap.put(Breeds.class.getDeclaredMethod("getTemperament", null),(TableRow)getView().findViewById(R.id.rowTemp));
-            methodRowMap.put(Breeds.class.getDeclaredMethod("getOrigin", null),(TableRow)getView().findViewById(R.id.rowOrigin));
-            methodRowMap.put(Breeds.class.getDeclaredMethod("getWeight", null),(TableRow)getView().findViewById(R.id.rowWeight));
-            methodRowMap.put(Breeds.class.getDeclaredMethod("getLife_span", null),(TableRow)getView().findViewById(R.id.rowLife));
-            methodRowMap.put(Breeds.class.getDeclaredMethod("getWikipedia_url",null),(TableRow)getView().findViewById(R.id.rowWiki));
+            methodRowMap.put(Breeds.class.getDeclaredMethod("getTemperament", null),(ConstraintLayout)getView().findViewById(R.id.rowTemp));
+            methodRowMap.put(Breeds.class.getDeclaredMethod("getOrigin", null),(ConstraintLayout) getView().findViewById(R.id.rowTemp));
+            methodRowMap.put(Breeds.class.getDeclaredMethod("getWeight", null),(ConstraintLayout) getView().findViewById(R.id.rowWeight));
+            methodRowMap.put(Breeds.class.getDeclaredMethod("getLife_span", null),(ConstraintLayout) getView().findViewById(R.id.rowLife));
+            methodRowMap.put(Breeds.class.getDeclaredMethod("getWikipedia_url",null),(ConstraintLayout) getView().findViewById(R.id.rowWiki));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -221,26 +245,27 @@ public class BreedDetailFragment extends Fragment {
         Method[] methods = Breeds.class.getDeclaredMethods();
 
         for(int i=0;i<methods.length;i++){
-            if(!checkNullGetters(selectedCat, methods[i]) && methods[i].getReturnType().equals(Integer.TYPE)){
-                try {
-                    int result=(int)methods[i].invoke(selectedCat);
-                    if (result!=0){
-                        if(methods[i].getName().contains("friendly")){
-                            friendEntries.add(new RadarEntry(result,result));
-                            friendLabels.add(methods[i].getName().substring(3));
+            if(methods[i].getReturnType().equals(Integer.TYPE)){
+                if(!checkNullGetters(selectedCat, methods[i])){
+                    try {
+                        int result=(int)methods[i].invoke(selectedCat);
+                        if (result!=0){
+                            if(methods[i].getName().contains("friendly")){
+                                friendEntries.add(new RadarEntry(result,result));
+                                friendLabels.add(methods[i].getName().substring(3));
+                            }
+                            else{
+                                radarEntries.add(new RadarEntry(result, result));
+                                labels.add(methods[i].getName().substring(3));
+                            }
                         }
-                        else{
-                            radarEntries.add(new RadarEntry(result, result));
-                            labels.add(methods[i].getName().substring(3));
-                        }
+
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
                     }
-
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
                 }
-
 
             }
         }
@@ -295,9 +320,9 @@ public class BreedDetailFragment extends Fragment {
 
     private boolean checkNullGetters(Breeds selectedCat, Method method) {
         Object obj=null;
+        System.out.println(selectedCat.getName() +" at checkNullGetters");
         try {
             obj= method.invoke(selectedCat);
-
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -311,6 +336,7 @@ public class BreedDetailFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -318,7 +344,7 @@ public class BreedDetailFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_breed_detail, container, false);
     }
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState){
+    public void onViewCreated(final View view, Bundle savedInstanceState){
 
     }
     // TODO: Rename method, update argument and hook method into UI event

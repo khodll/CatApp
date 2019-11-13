@@ -8,6 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -59,6 +66,8 @@ public class FavouritesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -66,6 +75,14 @@ public class FavouritesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favourites, container, false);
+    }
+    @Override
+    public void onViewCreated(View view,Bundle savedInstanceState){
+        RecyclerView favRecycler = getView().findViewById(R.id.favRecycler);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        favRecycler.setLayoutManager(layoutManager);
+        SearchResultAdapter searchResultAdapter=new SearchResultAdapter(Favourite.getFavourited());
+        favRecycler.setAdapter(searchResultAdapter);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

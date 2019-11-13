@@ -40,6 +40,7 @@ public class SearchResultsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String searchText;
     private String mParam2;
+    private String url;
 
     private OnFragmentInteractionListener mListener;
 
@@ -68,15 +69,33 @@ public class SearchResultsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             searchText = getArguments().getString("SEARCH_TEXT");
+            System.out.println(searchText);
+            url="https://api.thecatapi.com/v1/breeds/search?q="+searchText;
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        else{
+            url="https://api.thecatapi.com/v1/breeds/";
+        }
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_search_results, container, false);
+    }
+
+    @Override
+    public void onViewCreated(final View view, Bundle savedInstanceState){
         RequestQueue requestQueue= Volley.newRequestQueue(getContext());
         Response.Listener<String> responseListener = new Response.Listener<String>(){
             @Override
             public void onResponse(String response){
-                RecyclerView searchRecycler = getView().findViewById(R.id.searchRecycler);
+                RecyclerView searchRecycler = view.findViewById(R.id.searchRecycler);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 searchRecycler.setLayoutManager(layoutManager);
                 Breeds[] importedBreeds = new Gson().fromJson(response,Breeds[].class);
@@ -92,18 +111,9 @@ public class SearchResultsFragment extends Fragment {
             }
 
         };
-        String url = "https://api.thecatapi.com/v1/breeds/search?q="+searchText;
         StringRequest stringRequest = new StringRequest(Request.Method.GET,url,responseListener,errorListener);
         requestQueue.add(stringRequest);
     }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_results, container, false);
-    }
-
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

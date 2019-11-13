@@ -77,6 +77,8 @@ class Breeds {
 
     private int affection_level;
 
+
+
     public int getCat_friendly() {
         return cat_friendly;
     }

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,40 +15,56 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements SearchResultsFragment.OnFragmentInteractionListener,
-        BreedDetailFragment.OnFragmentInteractionListener{
-    public static ArrayList<Breeds> favourites=new ArrayList<>();
+        BreedDetailFragment.OnFragmentInteractionListener, FavouritesFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BottomNavigationView navBar = findViewById(R.id.bottomNav);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        final FavouritesFragment favouritesFragment = new FavouritesFragment();
+
         navBar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch(menuItem.getItemId()){
                     case R.id.browseButton:
                         Toast.makeText(MainActivity.this,"Browse",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        SearchResultsFragment searchResultsFragment= new SearchResultsFragment();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment_slot, searchResultsFragment);
+                        fragmentTransaction.commit();
                         break;
                     case R.id.favButton:
                         Toast.makeText(MainActivity.this,"Favourites",Toast.LENGTH_SHORT).show();
-                        fragmentTransaction.replace(R.id.fragment_slot,favouritesFragment);
-                        fragmentTransaction.commit(); break;
+                        FragmentManager fragmentManager2 = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
+                        FavouritesFragment favouritesFragment = new FavouritesFragment();
+                        fragmentTransaction2.replace(R.id.fragment_slot,favouritesFragment);
+                        fragmentTransaction2.commit(); break;
 
                 }
                 return true;
             }
         });
-
+        SearchResultsFragment searchResultsFragment= new SearchResultsFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_slot, searchResultsFragment);
+        fragmentTransaction.commit();
     }
 
     public void onClickSearch(View view){
